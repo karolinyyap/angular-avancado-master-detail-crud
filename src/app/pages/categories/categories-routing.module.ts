@@ -6,7 +6,7 @@ import { CategoryFormComponent } from './category-form/category-form.component';
 
 const routes: Routes = [
   { path: '', component: CategoryListComponent}, //apenas listagem, por isso é list
-  { path: ':id', component: CategoryFormComponent}, /*nos próximos dois vai criar ou editar, logo será preciso
+  { path: 'new', component: CategoryFormComponent}, /*nos próximos dois vai criar ou editar, logo será preciso
                                                     adicionar o form*/
   { path: ':id/edit', component: CategoryFormComponent},
 ];
