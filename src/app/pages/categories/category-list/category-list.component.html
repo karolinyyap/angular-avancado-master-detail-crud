@@ -30,16 +30,24 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let category of categories">
+        <tr *ngFor="let category of categories; trackBy: trackById">
             <td>
-                <strong>Lazer</strong>
+                <strong>{{ category.nome }}</strong>
                 <br>
-                <small>Cinema, parque, praia</small>
+                <small>{{ category.descricao }}</small>
             </td>
-            <td >
-                <a [routerLink]="[category.id, 'edit']" class="btn btn-outline-info btn-sm me-3">Editar</a>
-                <button (click)="excluir(category)" class="btn btn-outline-danger btn-sm">Excluir</button>
+
+            <td>
+                <a [routerLink]="[category.id, 'edit']"
+                class="btn btn-outline-info btn-sm me-3">
+                Editar
+                </a>
+
+                <button (click)="excluir(category)"
+                        class="btn btn-outline-danger btn-sm">
+                Excluir
+                </button>
             </td>
-        </tr>
+            </tr>
     </tbody>
 </table>

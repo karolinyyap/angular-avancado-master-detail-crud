@@ -1,0 +1,10 @@
+.breadcrumb {
+    background-color: #f3f3f3; 
+    padding: 10px 15px;       
+    border-radius: 5px;      
+}
+
+.btn {
+    display: flex;
+    justify-self: end;
+}

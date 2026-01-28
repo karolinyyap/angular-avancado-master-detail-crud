@@ -3,3 +3,9 @@
     padding: 10px 15px;       
     border-radius: 5px;      
 }
+
+
+.col-md .btn {
+    display: flex;
+    justify-self: end;
+}

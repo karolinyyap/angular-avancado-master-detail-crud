@@ -1,4 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { Form, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms'
+import { ActivatedRoute, Router } from '@angular/router'
+
+import { Category } from '../shared/category.model';
+import { CategoryService } from '../shared/category.service';
+
+import { switchMap } from 'rxjs/operators';
+
+import toastr from 'toastr';
 
 @Component({
   selector: 'app-category-form',
@@ -7,9 +16,110 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CategoryFormComponent implements OnInit {
 
-  constructor() { }
+  currentAction: string;
+  categoryForm: FormGroup;
+  pageTitle: string;
+  serverErrorMessages: string[] = null;
+  submittingForm: boolean = false;
+  category: Category = new Category;
+
+  constructor(private CategoryService: CategoryService, private route: ActivatedRoute, 
+              private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
+    this.setCurrentAction();
+    this.buildCategoryForm();
+    this.loadCategory();
+  }
+
+  ngAfterContentChecked(){
+    this.setPageTitle();
+  }
+
+  submitForm(){
+    if (this.currentAction == "new")
+      this.createCategory();
+    else 
+      this.updateCategory();
+  }
+
+  private setCurrentAction() {
+    if (this.route.snapshot.url[0].path == "new")
+      this.currentAction = "new"
+    else 
+      this.currentAction = "edit"
+  }
+
+  private buildCategoryForm() {
+    this.categoryForm = this.formBuilder.group({
+      id: [null],
+      nome: [null, [Validators.required, Validators.minLength(2)]],
+      descricao: [null]
+    });
+  }
+
+  private loadCategory(){
+    if (this.currentAction == "edit"){
+      this.route.paramMap.pipe(
+        switchMap(params => this.CategoryService.getById(+params.get("id")))
+      )
+
+      .subscribe(
+        (category) => {
+          this.category = category;
+          this.categoryForm.patchValue(category)
+        },
+        (error) => alert ("Ocorreu um erro no servidor")
+      )
+    }
+  }
+
+  private setPageTitle() {
+    if (this.currentAction == "new")
+      this.pageTitle = "Cadastro de nova categoria"
+    else {
+      const categoryName = this.category.nome || ""
+      this.pageTitle = "Editando categoria: " + categoryName;
+    }
+  }
+
+  private createCategory(){
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+
+    this.CategoryService.create(category)
+      .subscribe(
+        category => this.actionForSucess(category),
+        error => this.actionsForError(error)
+      )
+  }
+
+  private updateCategory(){
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+
+    this.CategoryService.update(category)
+      .subscribe(
+        category => this.actionForSucess(category),
+        error => this.actionsForError(error)
+      )
+  }
+
+  private actionForSucess(category: Category){
+    toastr.success("Solicitação processada com sucesso");
+
+    this.router.navigateByUrl("categories", {skipLocationChange: true}). then (
+      () => this.router.navigate(["categories", category.id, "edit"])
+    )
+  }
+
+  private actionsForError(error){
+    toastr.error("Ocorreu um erro ao processar sua solicitação");
+
+    this.submittingForm = false;
+
+    if (error.status == 422)
+      this.serverErrorMessages = JSON.parse(error._body).errors;
+    else
+      this.serverErrorMessages = ["Falha na comunicação com o servidor. Por favor, tente mais tarde!"]
   }
 
 }

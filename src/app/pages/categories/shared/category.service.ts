@@ -21,10 +21,16 @@ export class CategoryService {
   }
 
   create(category: Category): Observable<Category> {
-    category.id = this.categories.length + 1;
-    this.categories.push(category);
-    return of(category);
-  }
+  const maxId = this.categories.length > 0
+    ? Math.max(...this.categories.map(c => c.id))
+    : 0;
+
+  category.id = maxId + 1;
+  this.categories.push(category);
+
+  return of(category);
+}
+
 
   update(category: Category): Observable<Category> {
     const index = this.categories.findIndex(c => c.id === category.id);

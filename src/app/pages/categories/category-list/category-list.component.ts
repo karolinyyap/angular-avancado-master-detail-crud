@@ -37,5 +37,10 @@ export class CategoryListComponent implements OnInit {
   }
 }
 
+trackById(index: number, category: Category) {
+  return category.id;
+}
+
+
 
 }
