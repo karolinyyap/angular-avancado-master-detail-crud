@@ -1,0 +1,70 @@
+<nav class="mb-5">
+    <ol class="breadcrumb ">
+        <li class="breadcrumb-item">
+            <a routerLink="/">Home</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Lançamentos
+        </li>
+    </ol>
+</nav>
+
+<div class="row mb-4">
+    <div class="col-md">
+        <h1 class="h2 border-left pl-2">
+            Lançamentos
+        </h1>
+    </div>
+    <div class="col-md">
+        <a routerLink="new" class="btn btn-success float-right">
+            + Novo Lançamento
+        </a>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th class="bg-primary text-white">Lançamento</th>
+            <th class="bg-primary text-white">Categoria</th>
+            <th class="bg-primary text-white">Valor</th>
+            <th class="bg-primary text-white">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let entry of entries; trackBy: trackById">
+            <td>
+                <strong>{{ entry.nome }}</strong>
+                <br>
+                <small class="text-success">{{ entry.data }}</small>
+                <br>
+                <small *ngIf="entry.descricao">{{ entry.descricao }}</small>
+                
+            </td>
+            <td>
+                {{entry.categoria.nome}}
+            </td>
+            <td>
+                <strong [class.text-success]="entry.tipo == 'receita'" [class.text-danger]="entry.tipo == 'despesa'">
+                    R$ {{entry.valor}}
+                </strong>
+                <br>
+                <small [class.text-success]="entry.pago" [class.text-danger]="!entry.pago">
+                    {{ entry.pago ? 'Pago' : 'Pendente' }}
+                </small>
+            </td>
+
+            <td>
+                <a [routerLink]="[entry.id, 'edit']"
+                class="btn btn-outline-info btn-sm me-3">
+                Editar
+                </a>
+
+                <button (click)="excluir(entry)"
+                        class="btn btn-outline-danger btn-sm">
+                Excluir
+                </button>
+            </td>
+            </tr>
+    </tbody>
+</table>

@@ -1,0 +1,111 @@
+<nav class="mb-5">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a routerLink="/entries">Lançamentos</a></li>
+    <li class="breadcrumb-item active">{{pageTitle}}</li>
+  </ol>
+</nav>
+
+<div class="row mb-4">
+  <div class="col-md"><h1 class="h2 border-left pl-2">{{pageTitle}}</h1></div>
+  <div class="col-md">
+    <a routerLink="/entries" class="btn btn-light float-right">&lt;&lt; Voltar</a>
+  </div>
+</div>
+
+<form [formGroup]="entryForm" (submit)="submitForm()">
+  <div class="card">
+    <div class="card-header">Informações sobre o lançamento</div>
+    <div class="card-body">
+
+      <!-- Tipo -->
+      <div class="form-group col-md-4">
+        <label for="type">Tipo</label>
+        <select id="type" formControlName="tipo" class="form-control">
+          <option value="">Selecione</option>
+          <option value="despesa">Despesas</option>
+          <option value="receita">Receitas</option>
+        </select>
+        <div class="text-danger" *ngIf="entryForm.get('tipo').invalid && entryForm.get('tipo').touched">
+          Dado obrigatório
+        </div>
+      </div>
+
+      <!-- Nome -->
+      <div class="form-group col-md-4">
+        <label for="name">Nome</label>
+        <input type="text" id="name" formControlName="nome" class="form-control">
+        <div class="text-danger" *ngIf="entryForm.get('nome').invalid && entryForm.get('nome').touched">
+          <div *ngIf="entryForm.get('nome')?.errors?.required">Dado obrigatório</div>
+          <div *ngIf="entryForm.get('nome')?.errors?.minlength">Deve ter no mínimo 2 caracteres</div>
+        </div>
+      </div>
+
+      <!-- Valor -->
+      <div class="form-group col-md-4">
+        <label for="valor">Valor</label>
+        <input type="text" id="valor" formControlName="valor" class="form-control">
+        <div class="text-danger" *ngIf="entryForm.get('valor').invalid && entryForm.get('valor').touched">
+          Dado obrigatório
+        </div>
+      </div>
+
+      <!-- Data -->
+      <div class="form-group col-md-4">
+        <label for="data">Data</label>
+        <p-calendar id="data" formControlName="data"
+                    dateFormat="yy-mm-dd"
+                    showIcon="true"
+                    placeholder="Selecione uma data"
+                    class="w-100">
+        </p-calendar>
+        <div class="text-danger" *ngIf="entryForm.get('data').invalid && entryForm.get('data').touched">
+          Data obrigatória
+        </div>
+      </div>
+
+      <!-- Pago -->
+      <div class="form-group col-md-4">
+        <label for="pago">Pago</label>
+        <select id="pago" formControlName="pago" class="form-control">
+          <option [value]="true">Sim</option>
+          <option [value]="false">Não</option>
+        </select>
+        <div class="text-danger" *ngIf="entryForm.get('pago').invalid && entryForm.get('pago').touched">
+          Selecione se está pago
+        </div>
+      </div>
+
+      <!-- Categoria -->
+      <div class="form-group col-md-4">
+        <label for="categoriaId">Categoria</label>
+        <select id="categoriaId" formControlName="categoriaId" class="form-control">
+          <option value="">Selecione</option>
+          <option *ngFor="let cat of categorias" [value]="cat.id">{{cat.nome}}</option>
+        </select>
+        <div class="text-danger" *ngIf="entryForm.get('categoriaId').invalid && entryForm.get('categoriaId').touched">
+          Selecione uma categoria
+        </div>
+      </div>
+
+      <!-- Descrição -->
+      <div class="form-group col-md-8">
+        <label for="description">Descrição</label>
+        <input type="text" id="description" formControlName="descricao" class="form-control">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Erros do servidor -->
+  <div class="alert alert-danger mt-4" *ngIf="serverErrorMessages">
+    <ul>
+      <li *ngFor="let error of serverErrorMessages">{{error}}</li>
+    </ul>
+  </div>
+
+  <!-- Botão Salvar -->
+  <button type="submit" class="btn btn-primary mt-4" [disabled]="submittingForm || entryForm.invalid">
+    Salvar
+  </button>
+</form>
