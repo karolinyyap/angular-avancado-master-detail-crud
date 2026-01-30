@@ -42,7 +42,7 @@
                 
             </td>
             <td>
-                {{entry.categoria.nome}}
+                {{entry.categoria?.nome}}
             </td>
             <td>
                 <strong [class.text-success]="entry.tipo == 'receita'" [class.text-danger]="entry.tipo == 'despesa'">

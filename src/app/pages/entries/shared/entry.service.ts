@@ -7,7 +7,7 @@ import { Entry } from './entry.models';
 })
 export class EntryService {
 
-  private entries: Entry[] = [
+private entries: Entry[] = [
   {
     id: 1,
     nome: 'Cinema',
@@ -16,7 +16,7 @@ export class EntryService {
     valor: '50',
     data: '2026-10-28',
     pago: true,
-    categoria: { id: 1, nome: 'Lazer', descricao: 'Cinema, parque, praia' }
+    categoriaId: 3
   } as Entry,
   {
     id: 2,
@@ -26,9 +26,10 @@ export class EntryService {
     valor: '2500',
     data: '2026-10-28',
     pago: true,
-    categoria: { id: 2, nome: 'Estudos', descricao: 'Faculdade, cursos' }
+    categoriaId: 4
   } as Entry
 ];
+
 
   getAll(): Observable<Entry[]> {
     return of(this.entries);

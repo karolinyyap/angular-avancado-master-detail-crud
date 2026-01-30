@@ -35,11 +35,12 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   ) {}
 
   ngOnInit(): void {
-    this.setCurrentAction();
-    this.loadCategorias();
-    this.buildEntryForm();
-    this.loadEntry();
-  }
+  this.setCurrentAction();
+  this.buildEntryForm();
+  this.loadCategorias();
+  this.loadEntry();
+}
+
 
   ngAfterContentChecked() {
     this.setPageTitle();
@@ -63,7 +64,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       descricao: [null],
       tipo: [null, [Validators.required]],
       valor: [null, [Validators.required]],
-      data: [new Date(), [Validators.required]],
+      data: [null, [Validators.required]],
       pago: [false, [Validators.required]],
       categoriaId: [null, [Validators.required]]
     });
@@ -83,11 +84,16 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       this.route.paramMap.pipe(
         switchMap(params => this.entryService.getById(+params.get('id')))
       ).subscribe(
-        entry => this.entryForm.patchValue(entry),
+        entry => {
+          setTimeout(() => {
+            this.entryForm.patchValue(entry);
+          });
+        },
         error => toastr.error('Ocorreu um erro no servidor')
       );
     }
-  }
+}
+
 
   private setPageTitle() {
     if (this.currentAction === 'new') this.pageTitle = 'Cadastro de novo lançamento';

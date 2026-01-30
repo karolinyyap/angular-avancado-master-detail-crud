@@ -22,7 +22,7 @@
       <div class="form-group col-md-4">
         <label for="type">Tipo</label>
         <select id="type" formControlName="tipo" class="form-control">
-          <option value="">Selecione</option>
+          <option value=""></option>
           <option value="despesa">Despesas</option>
           <option value="receita">Receitas</option>
         </select>
@@ -53,13 +53,8 @@
       <!-- Data -->
       <div class="form-group col-md-4">
         <label for="data">Data</label>
-        <p-calendar id="data" formControlName="data"
-                    dateFormat="yy-mm-dd"
-                    showIcon="true"
-                    placeholder="Selecione uma data"
-                    class="w-100">
-        </p-calendar>
-        <div class="text-danger" *ngIf="entryForm.get('data').invalid && entryForm.get('data').touched">
+        <input type="date" id="data" class="form-control" formControlName="data">
+      <div class="text-danger" *ngIf="entryForm.get('data').invalid && entryForm.get('data').touched">
           Data obrigatória
         </div>
       </div>
@@ -68,8 +63,8 @@
       <div class="form-group col-md-4">
         <label for="pago">Pago</label>
         <select id="pago" formControlName="pago" class="form-control">
-          <option [value]="true">Sim</option>
-          <option [value]="false">Não</option>
+          <option [ngValue]="true">Sim</option>
+          <option [ngValue]="false">Não</option>
         </select>
         <div class="text-danger" *ngIf="entryForm.get('pago').invalid && entryForm.get('pago').touched">
           Selecione se está pago
@@ -80,8 +75,8 @@
       <div class="form-group col-md-4">
         <label for="categoriaId">Categoria</label>
         <select id="categoriaId" formControlName="categoriaId" class="form-control">
-          <option value="">Selecione</option>
-          <option *ngFor="let cat of categorias" [value]="cat.id">{{cat.nome}}</option>
+          <option [ngValue]="null">Selecione</option>
+          <option *ngFor="let cat of categorias" [ngValue]="cat.id"> {{ cat.nome }}</option>
         </select>
         <div class="text-danger" *ngIf="entryForm.get('categoriaId').invalid && entryForm.get('categoriaId').touched">
           Selecione uma categoria
